@@ -1,5 +1,8 @@
 import generateUniqueId from 'generate-unique-id';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getData } from '../Services/Helper'
+
 
 function Add() {
   const [inputText, setInputText] = useState({
@@ -7,38 +10,57 @@ function Add() {
     fname: '',
     lname: '',
     email: '',
-    address: ''
-  });
+    address: '',
+    gender:'',
+    age:''
+});
 
-  const handleInput = (e) => {
+
+let viewData = getData();
+
+const navigate = useNavigate();
+
+const handleInput = (e) => {
+
     let name = e.target.name;
     let value = e.target.value;
 
     setInputText({ ...inputText, [name]: value });
-  }
+}
 
-  const handleSubmit = (e) => {
+const handleSubmit = (e) => {
+
     e.preventDefault();
 
+
     let obj = {
-      ...inputText
+        ...inputText
     }
 
     obj.id = generateUniqueId({ length: 4 });
 
     console.log("OBJ", obj);
-    // setViewData([...viewData, obj]);
+    
+
+    viewData = [...viewData, obj];
+
 
     setInputText({
       id: '',
       fname: '',
       lname: '',
       email: '',
-      address: ''
+      address: '',
+      gender:'',
+      age:''
     })
 
-    // navigate('/');
-  }
+    console.log("viewData", viewData);
+    localStorage.setItem('myData', JSON.stringify(viewData));
+    navigate('/viewData');
+}
+
+
 
   return (
     <>
@@ -70,74 +92,6 @@ function Add() {
                 <button className="btn serch text-white btn-info" type="submit">Search</button>
               </form>
             </div>
-          </div>
-          <div className="pt-5">
-            <table border="1" width="100%">
-              <thead>
-                <tr>
-                  <th>
-                    No.
-                  </th>
-                  <th>
-                    Name.
-                  </th>
-                  <th>
-                    sur Name.
-                  </th>
-                  <th>
-                    Email.
-                  </th>
-                  <th>
-                    address.
-                  </th>
-                  <th>
-                    Age.
-                  </th>
-                  <th>
-                    gender
-                  </th>
-                  <th>
-                    update / Deleat
-                  </th>
-                </tr>
-              </thead>
-              <tbody id="table-data">
-                {
-
-                  // viewData.map((data, index) => {
-
-                  //     return (
-                  //         <tr>
-                  //             <td>{index + 1}</td>
-                  //             <td>{
-                  //                 data.fname
-                  //             }</td>
-                  //             <td>{
-                  //                 data.lname
-                  //             }</td>
-                  //             <td>{
-                  //                 data.email
-                  //             }</td>
-                  //             <td>{
-                  //                 data.address
-                  //             }</td>
-                  //             <td>{
-                  //                 data.age
-                  //             }</td>
-                  //             <td>{
-                  //                 data.gender
-                  //             }</td>
-                  //             <td>
-                  //                 <button class="btn  edit edit-btn bg-success text-white px-4 m-2" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleEdit(data.id)} type="submit"><i class="fa-solid fa-eye"></i></button>
-                  //                 <button class="btn  del-btn trash bg-danger text-white px-4 m-2" onClick={() => handleDelete(data.id)} type="submit"><i class="fa-solid fa-trash"></i></button>
-                  //             </td>
-                  //         </tr>
-                  //     )
-
-                  // })
-                }
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
